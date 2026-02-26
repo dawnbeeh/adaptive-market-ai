@@ -98,6 +98,7 @@ class PerishableMarketEnv(gym.Env):
         return self._get_obs(), self._get_info()
 
     def step(self, action):
+        action = np.clip(action, self.action_space.low, self.action_space.high)
         sell_ratio = float(action[0])
         price_multiplier = float(action[1])
 
