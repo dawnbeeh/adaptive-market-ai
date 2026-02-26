@@ -140,9 +140,11 @@ class PerishableMarketEnv(gym.Env):
         # Spoilage: if freshness drops below threshold, lose some inventory
         spoilage_loss = 0.0
         if self.freshness < 0.1:
-            spoiled = self.inventory * 0.2
+            spoiled = self.inventory * 0.2  # 20% of remaining spoils
             self.inventory -= spoiled
-            spoilage_loss = spoiled
+            spoilage_loss = spoiled * self.spoilage_penalty_per_unit
+
+        self.inventory = max(self.inventory, 0.0)
         self.current_step += 1
 
         # Reward
