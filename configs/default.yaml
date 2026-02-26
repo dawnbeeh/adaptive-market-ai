@@ -1,0 +1,36 @@
+# Adaptive Market AI - Default Configuration
+
+environment:
+  max_steps: 30              # Episode length (days)
+  initial_inventory: 100.0
+  initial_freshness: 1.0
+  storage_cost_per_unit: 0.5
+  spoilage_penalty_per_unit: 2.0
+  base_price: 10.0
+
+market:
+  price_drift: 0.0
+  price_volatility: 0.3
+  mean_reversion_rate: 0.1
+  demand_base: 50.0
+  demand_amplitude: 20.0
+  demand_period: 7.0         # Weekly seasonality
+  demand_noise_std: 5.0
+  price_elasticity: 1.5
+  shock_probability: 0.05
+  shock_magnitude: 0.5
+
+training:
+  total_timesteps: 50000
+  learning_rate: 0.0003
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  seed: 42
+  model_save_path: results/ppo_market_agent
+
+evaluation:
+  n_episodes: 50
+  seed: 123
+  results_dir: results
