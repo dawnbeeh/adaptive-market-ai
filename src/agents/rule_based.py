@@ -29,12 +29,16 @@ class RuleBasedAgent:
         if demand_level > 60:
             sell_ratio += 0.1
 
+        sell_ratio = np.clip(sell_ratio, 0.0, 1.0)
+
         # Price multiplier: charge more when fresh, discount when stale
         price_multiplier = 0.8 + 0.8 * freshness  # range ~[0.8, 1.6]
 
         # Discount further when time is running out
         if time_norm > 0.8:
             price_multiplier *= 0.8
+
+        price_multiplier = np.clip(price_multiplier, 0.5, 2.0)
 
         action = np.array([sell_ratio, price_multiplier], dtype=np.float32)
         return action, None
