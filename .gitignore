@@ -1,2 +1,27 @@
 memo.md
 PROJECT_PLAN.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Results (trained models, plots, eval output)
+results/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
