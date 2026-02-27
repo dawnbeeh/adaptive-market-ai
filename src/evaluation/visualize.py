@@ -50,7 +50,7 @@ def plot_reward_distribution(results: dict, results_dir: Path):
     """Box plot of reward distributions."""
     fig, ax = plt.subplots(figsize=(8, 5))
     data = [results[a]["all_rewards"] for a in results]
-    ax.boxplot(data, labels=list(results.keys()))
+    ax.boxplot(data, tick_labels=list(results.keys()))
     ax.set_ylabel("Episode Reward")
     ax.set_title("Reward Distribution by Agent")
     ax.axhline(y=0, color="gray", linestyle="--", alpha=0.5)
