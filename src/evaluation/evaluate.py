@@ -1,7 +1,10 @@
 """Evaluate all agents on the perishable market environment."""
 
 import json
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 import numpy as np
 import yaml
@@ -12,8 +15,11 @@ from src.agents.rule_based import RuleBasedAgent
 from src.environment.market_env import PerishableMarketEnv
 
 
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+
+
 def load_config(path: str = "configs/default.yaml") -> dict:
-    with open(path) as f:
+    with open(ROOT_DIR / path) as f:
         return yaml.safe_load(f)
 
 
@@ -54,7 +60,7 @@ def main():
     eval_cfg = config.get("evaluation", {})
     n_episodes = eval_cfg.get("n_episodes", 50)
     seed = eval_cfg.get("seed", 123)
-    results_dir = Path(eval_cfg.get("results_dir", "results"))
+    results_dir = ROOT_DIR / eval_cfg.get("results_dir", "results")
     results_dir.mkdir(parents=True, exist_ok=True)
 
     env = PerishableMarketEnv(config)
@@ -67,6 +73,7 @@ def main():
     model_path = config.get("training", {}).get(
         "model_save_path", "results/ppo_market_agent"
     )
+    model_path = str(ROOT_DIR / model_path)
     if Path(f"{model_path}.zip").exists():
         agents["PPO"] = PPOAgent.load(model_path, env)
     else:
