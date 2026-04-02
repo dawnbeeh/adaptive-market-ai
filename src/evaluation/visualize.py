@@ -13,6 +13,7 @@ import yaml
 from src.agents.ppo_agent import PPOAgent
 from src.agents.random_agent import RandomAgent
 from src.agents.rule_based import RuleBasedAgent
+from src.agents.sac_agent import SACAgent
 from src.environment.market_env import PerishableMarketEnv
 
 
@@ -31,7 +32,8 @@ def plot_agent_comparison(results: dict, results_dir: Path):
     stds = [results[a]["std_reward"] for a in agents]
 
     fig, ax = plt.subplots(figsize=(8, 5))
-    bars = ax.bar(agents, means, yerr=stds, capsize=5, color=["#e74c3c", "#3498db", "#2ecc71"][:len(agents)])
+    colors = ["#e74c3c", "#3498db", "#2ecc71", "#9b59b6", "#f39c12"]
+    bars = ax.bar(agents, means, yerr=stds, capsize=5, color=colors[:len(agents)])
     ax.set_ylabel("Mean Episode Reward")
     ax.set_title("Agent Performance Comparison")
     ax.axhline(y=0, color="gray", linestyle="--", alpha=0.5)
@@ -142,6 +144,13 @@ def main():
     model_path = str(ROOT_DIR / model_path)
     if Path(f"{model_path}.zip").exists():
         agents["PPO"] = PPOAgent.load(model_path, env)
+
+    sac_model_path = config.get("training_sac", {}).get(
+        "model_save_path", "results/sac_market_agent"
+    )
+    sac_model_path = str(ROOT_DIR / sac_model_path)
+    if Path(f"{sac_model_path}.zip").exists():
+        agents["SAC"] = SACAgent.load(sac_model_path, env)
 
     plot_episode_trace(env, agents, results_dir)
     print(f"\nAll plots saved to {results_dir}/")
