@@ -14,6 +14,8 @@ from src.agents.random_agent import RandomAgent
 from src.agents.rule_based import RuleBasedAgent
 from src.agents.sac_agent import SACAgent
 from src.environment.market_env import PerishableMarketEnv
+from src.agents.greedy_agent import GreedyAgent
+from src.agents.clearance_agent import ClearanceAgent
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
@@ -70,12 +72,15 @@ def main():
     agents = {}
     agents["Random"] = RandomAgent(env)
     agents["RuleBased"] = RuleBasedAgent(env)
+    agents["Greedy"] = GreedyAgent()
+    agents["Clearance"] = ClearanceAgent(env)
 
     model_path = config.get("training", {}).get(
         "model_save_path", "results/ppo_market_agent"
     )
     model_path = str(ROOT_DIR / model_path)
     if Path(f"{model_path}.zip").exists():
+        print("MODEL PATH =", model_path)
         agents["PPO"] = PPOAgent.load(model_path, env)
     else:
         print(f"Warning: No trained PPO model at {model_path}.zip — skipping PPO.")
