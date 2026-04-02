@@ -12,6 +12,7 @@ import yaml
 from src.agents.ppo_agent import PPOAgent
 from src.agents.random_agent import RandomAgent
 from src.agents.rule_based import RuleBasedAgent
+from src.agents.sac_agent import SACAgent
 from src.environment.market_env import PerishableMarketEnv
 
 
@@ -78,6 +79,15 @@ def main():
         agents["PPO"] = PPOAgent.load(model_path, env)
     else:
         print(f"Warning: No trained PPO model at {model_path}.zip — skipping PPO.")
+
+    sac_model_path = config.get("training_sac", {}).get(
+        "model_save_path", "results/sac_market_agent"
+    )
+    sac_model_path = str(ROOT_DIR / sac_model_path)
+    if Path(f"{sac_model_path}.zip").exists():
+        agents["SAC"] = SACAgent.load(sac_model_path, env)
+    else:
+        print(f"Warning: No trained SAC model at {sac_model_path}.zip — skipping SAC.")
 
     # Evaluate
     all_results = {}
